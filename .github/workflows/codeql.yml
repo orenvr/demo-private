@@ -1,16 +1,13 @@
-# .github/workflows/codeql.yml
 name: CodeQL
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  push: { branches: [ main ] }
+  pull_request: { branches: [ main ] }
   workflow_dispatch:
 
 permissions:
   contents: read
-  security-events: write
+  security-events: write   # <-- REQUIRED for uploading results
   actions: read
 
 jobs:
@@ -18,7 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: github/codeql-action/init@v3
         with:
           languages: go, python
-      - uses: github/codeql-action/analyze@v3
+
+      - uses: github/codeql-action/autobuild@v3   # needed for Go
+
+      - uses: github/codeql-action/analyze@v3     # uploads SARIF to Code Scanning
+        # Do NOT set upload:false here
