@@ -1,11 +1,12 @@
-name: CodeQL (Python)
+# .github/workflows/codeql.yml
+name: CodeQL
 
 on:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main ]
-  workflow_dispatch:  # lets you click "Run workflow" in Actions
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,12 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: github/codeql-action/init@v3
         with:
-          languages: python
-
-      # For pure Python you don't need autobuild.
+          languages: go, python
       - uses: github/codeql-action/analyze@v3
-        with:
-          category: "default-python"
