@@ -8,6 +8,7 @@ on:
     branches: [ "main", "master" ]
   schedule:
     - cron: '45 23 * * 0' # Runs at 11:45 PM on Sunday (in UTC)
+  workflow_dispatch:   # <-- add this line
 
 jobs:
   analyze:
