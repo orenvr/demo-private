@@ -210,7 +210,14 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 
 func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
-	quantity, _ := strconv.ParseUint(r.FormValue("quantity"), 10, 32)
+	quantityRaw := r.FormValue("quantity")
+	quantity, err := strconv.ParseUint(quantityRaw, 10, 32)
+	// Check bounds: must fit in int32 and be >= 1
+	if err != nil || quantity == 0 || quantity > uint64(math.MaxInt32) {
+		renderHTTPError(log, r, w, validator.ValidationErrorResponse(
+			fmt.Errorf("invalid quantity: must be 1 to %d", math.MaxInt32)), http.StatusUnprocessableEntity)
+		return
+	}
 	productID := r.FormValue("product_id")
 	payload := validator.AddToCartPayload{
 		Quantity:  quantity,
