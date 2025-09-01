@@ -210,17 +210,21 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 
 func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Request) {
 	log := r.Context().Value(ctxKeyLog{}).(logrus.FieldLogger)
+
+	// Parse quantity as *signed* 32-bit integer to avoid narrowing from uint → int32.
 	quantityRaw := r.FormValue("quantity")
-	quantity, err := strconv.ParseUint(quantityRaw, 10, 32)
-	// Check bounds: must fit in int32 and be >= 1
-	if err != nil || quantity == 0 || quantity > uint64(math.MaxInt32) {
-		renderHTTPError(log, r, w, validator.ValidationErrorResponse(
-			fmt.Errorf("invalid quantity: must be 1 to %d", math.MaxInt32)), http.StatusUnprocessableEntity)
+	qtyI64, err := strconv.ParseInt(quantityRaw, 10, 32) // range-checked by strconv to int32 bounds
+	if err != nil || qtyI64 < 1 {
+		renderHTTPError(log, r, w,
+			validator.ValidationErrorResponse(fmt.Errorf("invalid quantity: must be a positive integer")),
+			http.StatusUnprocessableEntity)
 		return
 	}
+	qty := int32(qtyI64)
+
 	productID := r.FormValue("product_id")
 	payload := validator.AddToCartPayload{
-		Quantity:  quantity,
+		Quantity:  qty,
 		ProductID: productID,
 	}
 	if err := payload.Validate(); err != nil {
@@ -235,11 +239,11 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), int32(payload.Quantity)); err != nil {
+	if err := fe.insertCart(r.Context(), sessionID(r), p.GetId(), qty); err != nil {
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to add to cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/cart")
+	w.Header().Set("location", baseUrl+"/cart")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -251,7 +255,7 @@ func (fe *frontendServer) emptyCartHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to empty cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/")
+	w.Header().Set("location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -430,7 +434,7 @@ func (fe *frontendServer) logoutHandler(w http.ResponseWriter, r *http.Request) 
 		c.MaxAge = -1
 		http.SetCookie(w, c)
 	}
-	w.Header().Set("Location", baseUrl + "/")
+	w.Header().Set("Location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 
