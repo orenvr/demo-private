@@ -10,9 +10,10 @@
  */
 
 import python
-import DataFlow::PathGraph
-import semmle.python.security.dataflow.Sources
-import semmle.python.security.dataflow.TaintTracking
+import semmle.python.dataflow.new.DataFlow
+import semmle.python.dataflow.new.TaintTracking
+import semmle.python.ApiGraphs
+
 
 /** Activate only when emailservice code exists (feature/project scope).
  *  You can tighten/loosen this later. */
