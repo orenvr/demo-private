@@ -5,3 +5,13 @@ Run a local SMTP sink (MailHog):
 ```bash
 docker run --rm -p 8025:8025 -p 1025:1025 mailhog/mailhog
 # Web UI: http://localhost:8025
+```
+
+Send a demo personalized confirmation email:
+
+```bash
+cd src/emailservice
+python send_demo.py "John Doe" "john@example.com" "ORDER-123"
+```
+
+The email will be sent to MailHog and viewable at http://localhost:8025
