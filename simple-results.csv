@@ -1,0 +1,2 @@
+"col0","source","sink","col3","col4","col5"
+"ControlFlowNode for List","ControlFlowNode for Attribute()","ControlFlowNode for List","Email header injection vulnerability: $@ flows to email headers or SMTP calls.","ControlFlowNode for Attribute()","untrusted data"

@@ -1,0 +1,3 @@
+"col0","source","sink","col3","col4","col5"
+"ControlFlowNode for Fstring","ControlFlowNode for name","ControlFlowNode for Fstring","Email header injection vulnerability: $@ flows to email headers or SMTP calls.","ControlFlowNode for name","untrusted data"
+"ControlFlowNode for Fstring","ControlFlowNode for email","ControlFlowNode for Fstring","Email header injection vulnerability: $@ flows to email headers or SMTP calls.","ControlFlowNode for email","untrusted data"

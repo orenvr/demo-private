@@ -1,0 +1,3 @@
+"col0","source","sink","col3","col4","col5"
+"ControlFlowNode for user_input_addr","ControlFlowNode for Attribute()","ControlFlowNode for user_input_addr","Email header injection: $@ flows to email headers or SMTP.","ControlFlowNode for Attribute()","untrusted data"
+"ControlFlowNode for List","ControlFlowNode for Attribute()","ControlFlowNode for List","Email header injection: $@ flows to email headers or SMTP.","ControlFlowNode for Attribute()","untrusted data"
