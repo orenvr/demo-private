@@ -21,7 +21,7 @@ jobs:
       - uses: github/codeql-action/init@v3
         with:
           languages: go, python
-          # Using only standard queries - no custom rules
+          queries: ./queries
 
       - uses: github/codeql-action/autobuild@v3   # needed for Go
 
