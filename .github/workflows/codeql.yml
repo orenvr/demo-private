@@ -11,7 +11,9 @@ permissions:
   actions: read
 
 jobs:
-  analyze:
+  # Standard CodeQL analysis (won't detect email header injection)
+  standard-analysis:
+    name: Standard CodeQL Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -23,5 +25,25 @@ jobs:
 
       - uses: github/codeql-action/autobuild@v3   # needed for Go
 
-      - uses: github/codeql-action/analyze@v3     # uploads SARIF to Code Scanning
-        # Do NOT set upload:false here
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "standard-codeql"
+          # uploads SARIF to Code Scanning
+
+  # Custom analysis with email header injection detection
+  custom-analysis:
+    name: Custom CodeQL Analysis (with Email Header Injection)
+    runs-on: ubuntu-latest  
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: go, python
+          queries: ./.github/codeql/ryudes-python-email
+      - uses: github/codeql-action/autobuild@v3   # needed for Go
+
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "custom-email-header"
+          # uploads SARIF to Code Scanning

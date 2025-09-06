@@ -21,4 +21,5 @@ jobs:
       - uses: github/codeql-action/init@v3
         with:
           languages: go, python
+          queries: ./queries
       - uses: github/codeql-action/analyze@v3

@@ -1,0 +1,71 @@
+[2025-09-05 20:01:58] [build-stderr] /bin/sh: 1: python2: not found
+[2025-09-05 20:01:58] [build-stdout] No directories containing root identifiers were found. Returning working directory as root.
+[2025-09-05 20:01:58] [build-stdout] Will try to guess Python version, as it was not specified in `lgtm.yml`
+[2025-09-05 20:01:58] [build-stdout] Trying to guess Python version based on Trove classifiers in setup.py
+[2025-09-05 20:01:58] [build-stdout] Did not find setup.py (expected it to be at /workspaces/demo-private/setup.py)
+[2025-09-05 20:01:58] [build-stdout] Trying to guess Python version based on travis file
+[2025-09-05 20:01:58] [build-stdout] Did not find any travis files (expected them at either ['/workspaces/demo-private/.travis.yml', '/workspaces/demo-private/travis.yml'])
+[2025-09-05 20:01:58] [build-stdout] Trying to guess Python version based on installed versions
+[2025-09-05 20:01:58] [build-stdout] Wanted to run Python 2, but it is not available. Using Python 3 instead
+[2025-09-05 20:01:58] [build-stdout] This script is running Python 3, but Python 2 is also available (as 'python3')
+[2025-09-05 20:01:58] [build-stdout] Could not guess Python version, will use default: Python 3
+[2025-09-05 20:01:58] [build-stdout] Calling python3 -S /usr/local/bin/codeql/python/tools/python_tracer.py --verbosity 3 -z all -c /workspaces/demo-private/.codeql-db/db-py/working/trap_cache -R /workspaces/demo-private
+[2025-09-05 20:01:58] [build-stdout] INFO: The Python extractor has recently stopped extracting the standard library by default. If you encounter problems, please let us know by submitting an issue to https://github.com/github/codeql. It is possible to re-enable extraction of the standard library by setting the environment variable CODEQL_EXTRACTOR_PYTHON_EXTRACT_STDLIB.
+[2025-09-05 20:01:58] [build-stdout] [INFO] Extraction will use the Python 3 standard library.
+[2025-09-05 20:01:58] [build-stdout] [INFO] sys_path is: ['/usr/local/bin/codeql/python/tools', '/home/codespace/.python/current/lib/python312.zip', '/home/codespace/.python/current/lib/python3.12', '/home/codespace/.python/current/lib/python3.12/lib-dynload']
+[2025-09-05 20:01:58] [build-stdout] [INFO] Python version 3.12.1
+[2025-09-05 20:01:58] [build-stdout] [INFO] Python extractor version 7.1.3
+[2025-09-05 20:01:58] [build-stdout] [INFO] [1] Extracted folder /workspaces/demo-private/src/loadgenerator in 2ms
+[2025-09-05 20:01:58] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/recommendationservice/logger.py in 46ms
+[2025-09-05 20:01:58] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/loadgenerator/locustfile.py in 75ms
+[2025-09-05 20:01:58] [build-stdout] [INFO] [2] Extracted folder /workspaces/demo-private/kustomize/components/shopping-assistant/scripts in 1ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/kustomize/components/shopping-assistant/scripts/generate_sql_from_products.py in 36ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted folder /workspaces/demo-private/kustomize in 1ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/emailservice/logger.py in 26ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/recommendationservice/demo_pb2.py in 101ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/datetime.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/emailservice/email_client.py in 45ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/emailservice/demo_pb2.py in 80ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted folder /workspaces/demo-private/kustomize/components in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/shoppingassistantservice/shoppingassistantservice.py in 100ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/emailservice/vuln_demo.py in 23ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/emailservice/test_send_demo_smtp.py in 45ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/json/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/logging/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/emailservice/mail_helpers.py in 20ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/recommendationservice/recommendation_server.py in 134ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /workspaces/demo-private/kustomize/components/shopping-assistant in 0ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /home/codespace/.python/current/lib/python3.12/urllib in 5ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /workspaces/demo-private/src in 1ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/random.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /home/codespace/.python/current/lib/python3.12/concurrent in 3ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /workspaces/demo-private/src/recommendationservice in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/email/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/urllib/parse.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /home/codespace/.python/current/lib/python3.12/concurrent/futures in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /home/codespace/.python/current/lib/python3.12/json in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted module time in 18ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/recommendationservice/client.py in 35ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/traceback.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/smtplib.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/os.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted module sys in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted folder /home/codespace/.python/current/lib/python3.12/logging in 1ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Skipped built-in file /home/codespace/.python/current/lib/python3.12/concurrent/futures/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/emailservice/demo_pb2_grpc.py in 593ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Skipped built-in file /home/codespace/.python/current/lib/python3.12/concurrent/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted folder /home/codespace/.python/current/lib/python3.12/email in 4ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Skipped built-in file /home/codespace/.python/current/lib/python3.12/types.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted module builtins in 3ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted folder /workspaces/demo-private/src/shoppingassistantservice in 2ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/emailservice/email_server.py in 157ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Skipped built-in file /home/codespace/.python/current/lib/python3.12/urllib/__init__.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted file /workspaces/demo-private/src/emailservice/send_demo.py in 30ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Extracted folder /workspaces/demo-private/src/emailservice in 3ms
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Skipped built-in file /home/codespace/.python/current/lib/python3.12/email/message.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [2] Skipped built-in file /home/codespace/.python/current/lib/python3.12/argparse.py
+[2025-09-05 20:01:59] [build-stdout] [INFO] [1] Extracted file /workspaces/demo-private/src/recommendationservice/demo_pb2_grpc.py in 482ms
+[2025-09-05 20:02:00] [build-stdout] [INFO] Processed 50 modules in 1.24s
+[2025-09-05 20:02:01] [build-stderr] Scanning for files in /workspaces/demo-private...
+[2025-09-05 20:02:01] [build-stderr] /workspaces/demo-private/.codeql-db/db-py: Indexing files in in /workspaces/demo-private...
+[2025-09-05 20:02:01] [build-stderr] Running command in /workspaces/demo-private: [/usr/local/bin/codeql/yaml/tools/index-files.sh, /workspaces/demo-private/.codeql-db/db-py/working/files-to-index3363048943051461581.list]
