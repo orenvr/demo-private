@@ -34,17 +34,23 @@ private predicate looksLikeRequestish(Expr e) {
 /** Sinks: Email header setters and SMTP recipient arguments, modeled via API Graphs. */
 private predicate isHeaderSetCall(DataFlow::CallCfgNode c) {
   // Message.__setitem__(header, value)  => msg["Header"] = value
-  c = API::moduleImport("email").getMember("message").getMember("Message").getASubclass*().getMember("__setitem__").getACall()
+  exists(API::Node api |
+    api = API::moduleImport("email").getMember("message").getMember("Message") and
+    c = api.getMember("__setitem__").getACall()
+  )
   or
   // Message.add_header("Header", value)
-  c = API::moduleImport("email").getMember("message").getMember("Message").getASubclass*().getMember("add_header").getACall()
+  exists(API::Node api |
+    api = API::moduleImport("email").getMember("message").getMember("Message") and
+    c = api.getMember("add_header").getACall()
+  )
 }
 
 private predicate isSmtpSendCall(DataFlow::CallCfgNode c) {
-  c = API::moduleImport("smtplib").getMember("SMTP").getASubclass*().getMember("sendmail").getACall()
-  or c = API::moduleImport("smtplib").getMember("LMTP").getASubclass*().getMember("sendmail").getACall()
-  or c = API::moduleImport("smtplib").getMember("SMTP").getASubclass*().getMember("send_message").getACall()
-  or c = API::moduleImport("smtplib").getMember("LMTP").getASubclass*().getMember("send_message").getACall()
+  exists(API::Node api |
+    api = API::moduleImport("smtplib").getMember(["SMTP", "LMTP"]) and
+    c = api.getMember(["sendmail", "send_message"]).getACall()
+  )
 }
 
 /** Acceptable header names (case-insensitive). */
@@ -60,15 +66,16 @@ predicate isSanitizedExpr(Expr e) {
   )
   or
   // Typed header builders: headerregistry.Address/Group
-  exists (DataFlow::CallCfgNode c |
-    (c = API::moduleImport("email").getMember("headerregistry").getMember("Address").getACall() or
-     c = API::moduleImport("email").getMember("headerregistry").getMember("Group").getACall())
-    and e = c.asExpr()
+  exists (API::Node api, DataFlow::CallCfgNode c |
+    api = API::moduleImport("email").getMember("headerregistry").getMember(["Address", "Group"]) and
+    c = api.getACall() and
+    e = c.asExpr()
   )
   or
   // Regex guard that (crudely) does not allow \r or \n
-  exists (DataFlow::CallCfgNode c |
-    c = API::moduleImport("re").getMember("fullmatch").getACall() and
+  exists (API::Node api, DataFlow::CallCfgNode c |
+    api = API::moduleImport("re").getMember("fullmatch") and
+    c = api.getACall() and
     // re.fullmatch(pattern, string)
     c.getArg(1).asExpr() = e and
     not c.getArg(0).toString().regexpMatch("\\\\r|\\\\n")
