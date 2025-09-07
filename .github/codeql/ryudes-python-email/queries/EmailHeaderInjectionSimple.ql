@@ -12,7 +12,6 @@
 import python
 import semmle.python.dataflow.new.DataFlow
 import semmle.python.dataflow.new.TaintTracking
-import semmle.python.ApiGraphs
 
 /** Activate only when emailservice code exists (feature/project scope). */
 predicate intentActive() {
@@ -27,10 +26,9 @@ private module EmailHeaderConfig implements DataFlow::ConfigSig {
   }
 
   predicate isSink(DataFlow::Node sink) {
-    // Simple sink: any call to smtplib functions
-    exists(Call call, ApiGraphs::Node api |
-      api = ApiGraphs::moduleImport("smtplib").getMember(_).getMember(_).getACall() and
-      call = api.asExpr() and
+    // Simple sink: any call to smtplib sendmail functions
+    exists(Call call |
+      call.getFunc().(Attribute).getAttr() = "sendmail" and
       sink.asExpr() = call.getAnArg()
     )
   }
@@ -38,7 +36,6 @@ private module EmailHeaderConfig implements DataFlow::ConfigSig {
 
 module EmailHeaderFlow = TaintTracking::Global<EmailHeaderConfig>;
 
-/** Report flows only when the feature/project scope is present. */
 from EmailHeaderFlow::PathNode source, EmailHeaderFlow::PathNode sink
 where intentActive() and EmailHeaderFlow::flowPath(source, sink)
 select sink.getNode(),
