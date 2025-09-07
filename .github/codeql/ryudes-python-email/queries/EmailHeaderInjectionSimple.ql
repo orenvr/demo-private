@@ -1,12 +1,12 @@
 /**
- * @name Untrusted data flows into email headers/SMTP (RyuDes)
+ * @name Untrusted data flows into email headers/SMTP (RyuDes) - Simple
  * @description Flags flows where untrusted input reaches email headers
  *              (To/Cc/Bcc/Subject/Reply-To) or SMTP recipient list without
  *              passing through recognized sanitizers/typed builders.
  * @kind path-problem
  * @problem.severity error
  * @tags security, external/cwe/cwe-74, external/cwe/cwe-93
- * @id py/ryudes-email-header-injection
+ * @id py/ryudes-email-header-injection-simple
  */
 
 import python
@@ -19,37 +19,19 @@ predicate intentActive() {
   exists(File f | f.getRelativePath().regexpMatch("^src/(emailservice|.*email).*\\.py$"))
 }
 
-/** Heuristic: parameter names commonly used for people/addresses. */
-private predicate hasEmailishParamName(Parameter p) {
-  p.getName().regexpMatch("^(name|to_name|email|to_email|display_name|recipient)$")
-}
-
-/** Heuristic: expression text hints at request/payload-like data. */
-private predicate looksLikeRequestish(Expr e) {
-  e.toString().regexpMatch("(?i)(request|payload|body|data|json)")
-}
-
-/** Taint configuration tying sources/sinks/sanitizers together. */
+/** Taint configuration for email header injection. */
 private module EmailHeaderConfig implements DataFlow::ConfigSig {
   predicate isSource(DataFlow::Node source) {
-    // Heuristic request/payload/data/json symbols
-    exists(Expr e | looksLikeRequestish(e) and source.asExpr() = e)
-    or
-    // Email-ish parameter names
-    exists(Parameter p | hasEmailishParamName(p) and source = DataFlow::parameterNode(p))
+    // Simple source: any parameter
+    source = DataFlow::parameterNode(_)
   }
 
   predicate isSink(DataFlow::Node sink) {
-    // Simple approach: look for calls to smtplib functions
-    exists(Call call |
-      call.getFunc().(Attribute).getAttr() = "sendmail" and
+    // Simple sink: any call to smtplib functions
+    exists(Call call, ApiGraphs::Node api |
+      api = ApiGraphs::moduleImport("smtplib").getMember(_).getMember(_).getACall() and
+      call = api.asExpr() and
       sink.asExpr() = call.getAnArg()
-    )
-    or
-    // Look for email message header assignments
-    exists(Subscript s |
-      s.getObject().toString().regexpMatch(".*[Mm]essage.*") and
-      sink.asExpr() = s.getValue()
     )
   }
 }
