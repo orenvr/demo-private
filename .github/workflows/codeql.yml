@@ -1,7 +1,7 @@
 name: CodeQLcustom
 
 on:
-  push: { branches: [ main ] }
+  push: { branches: [ main, CodeQL-email-header ] }
   pull_request: { branches: [ main ] }
   workflow_dispatch:
     inputs:
