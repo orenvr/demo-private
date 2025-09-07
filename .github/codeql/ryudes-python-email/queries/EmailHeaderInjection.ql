@@ -12,7 +12,7 @@
 import python
 import semmle.python.dataflow.new.DataFlow
 import semmle.python.dataflow.new.TaintTracking
-import semmle.python.ApiGraphs as API
+import semmle.python.ApiGraphs
 
 /** Activate only when emailservice code exists (feature/project scope). */
 predicate intentActive() {
@@ -30,19 +30,19 @@ private predicate looksLikeRequestish(Expr e) {
 }
 
 /** Sinks: Email header setters and SMTP recipient arguments, modeled via API Graphs. */
-private predicate isHeaderSetCall(API::CallNode c) {
+private predicate isHeaderSetCall(ApiGraphs::CallNode c) {
   // Message.__setitem__(header, value)  => msg["Header"] = value
-  c = API::call("email.message.Message.__setitem__").getACall()
+  c = ApiGraphs::call("email.message.Message.__setitem__").getACall()
   or
   // Message.add_header("Header", value)
-  c = API::call("email.message.Message.add_header").getACall()
+  c = ApiGraphs::call("email.message.Message.add_header").getACall()
 }
 
-private predicate isSmtpSendCall(API::CallNode c) {
-  c = API::call("smtplib.SMTP.sendmail").getACall()
-  or c = API::call("smtplib.LMTP.sendmail").getACall()
-  or c = API::call("smtplib.SMTP.send_message").getACall()
-  or c = API::call("smtplib.LMTP.send_message").getACall()
+private predicate isSmtpSendCall(ApiGraphs::CallNode c) {
+  c = ApiGraphs::call("smtplib.SMTP.sendmail").getACall()
+  or c = ApiGraphs::call("smtplib.LMTP.sendmail").getACall()
+  or c = ApiGraphs::call("smtplib.SMTP.send_message").getACall()
+  or c = ApiGraphs::call("smtplib.LMTP.send_message").getACall()
 }
 
 /** Acceptable header names (case-insensitive). */
@@ -53,20 +53,20 @@ private predicate interestingHeader(string h) {
 /** Sanitizers: reject CR/LF; typed Address builders; project sanitizer. */
 predicate isSanitizedExpr(Expr e) {
   // Project sanitizer (local function)
-  exists (API::CallNode c |
+  exists (ApiGraphs::CallNode c |
     c.getCallee().getName() = "sanitize_header" and c.getArgument(0).asExpr() = e
   )
   or
   // Typed header builders: headerregistry.Address/Group
-  exists (API::CallNode c |
-    (c = API::call("email.headerregistry.Address").getACall() or
-     c = API::call("email.headerregistry.Group").getACall())
+  exists (ApiGraphs::CallNode c |
+    (c = ApiGraphs::call("email.headerregistry.Address").getACall() or
+     c = ApiGraphs::call("email.headerregistry.Group").getACall())
     and e = c.asExpr()
   )
   or
   // Regex guard that (crudely) does not allow \r or \n
-  exists (API::CallNode c |
-    c = API::call("re.fullmatch").getACall() and
+  exists (ApiGraphs::CallNode c |
+    c = ApiGraphs::call("re.fullmatch").getACall() and
     // re.fullmatch(pattern, string)
     c.getArgument(1).asExpr() = e and
     not c.getArgument(0).toString().regexpMatch("\\\\r|\\\\n")
@@ -74,20 +74,18 @@ predicate isSanitizedExpr(Expr e) {
 }
 
 /** Taint configuration tying sources/sinks/sanitizers together. */
-class EmailHeaderCfg extends TaintTracking::Configuration {
-  EmailHeaderCfg() { this = "ryudes-email-header" }
-
-  override predicate isSource(DataFlow::Node n) {
+private module EmailHeaderConfig implements DataFlow::ConfigSig {
+  predicate isSource(DataFlow::Node n) {
     // Heuristic request/payload/data/json symbols
-    exists(Expr e | looksLikeRequestish(e) and n = TaintTracking::exprNode(e))
+    exists(Expr e | looksLikeRequestish(e) and n.asExpr() = e)
     or
     // Email-ish parameter names
-    exists(Parameter p | hasEmailishParamName(p) and n = TaintTracking::parameterNode(p))
+    exists(Parameter p | hasEmailishParamName(p) and n = DataFlow::parameterNode(p))
   }
 
-  override predicate isSink(DataFlow::Node n) {
+  predicate isSink(DataFlow::Node n) {
     // msg["Hdr"] = value  OR  msg.add_header("Hdr", value)
-    exists (API::CallNode c |
+    exists (ApiGraphs::CallNode c |
       isHeaderSetCall(c) and
       // header name in arg0, value in arg1
       n.asExpr() = c.getArgument(1).asExpr() and
@@ -95,7 +93,7 @@ class EmailHeaderCfg extends TaintTracking::Configuration {
     )
     or
     // SMTP recipients
-    exists (API::CallNode c |
+    exists (ApiGraphs::CallNode c |
       isSmtpSendCall(c) and
       (
         // sendmail(from_addr, to_addrs, msg)
@@ -107,14 +105,16 @@ class EmailHeaderCfg extends TaintTracking::Configuration {
     )
   }
 
-  override predicate isSanitizer(DataFlow::Node n) {
-    exists (Expr e | n = TaintTracking::exprNode(e) and isSanitizedExpr(e))
+  predicate isBarrier(DataFlow::Node n) {
+    exists (Expr e | n.asExpr() = e and isSanitizedExpr(e))
   }
 }
 
+module EmailHeaderFlow = TaintTracking::Global<EmailHeaderConfig>;
+
 /** Report flows only when the feature/project scope is present. */
-from EmailHeaderCfg cfg, DataFlow::PathNode src, DataFlow::PathNode snk
-where intentActive() and cfg.hasFlowPath(src, snk)
+from EmailHeaderFlow::PathNode src, EmailHeaderFlow::PathNode snk
+where intentActive() and EmailHeaderFlow::flowPath(src, snk)
 select snk.getNode(),
   "Untrusted input flows into an email header/SMTP without header-safe sanitization.",
   src, "Source here."
