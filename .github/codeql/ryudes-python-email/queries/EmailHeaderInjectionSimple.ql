@@ -26,9 +26,10 @@ private module EmailHeaderConfig implements DataFlow::ConfigSig {
   }
 
   predicate isSink(DataFlow::Node sink) {
-    // Simple sink: any call to smtplib sendmail functions
+    // Simple sink: any call to smtplib email sending functions
     exists(Call call |
-      call.getFunc().(Attribute).getAttr() = "sendmail" and
+      (call.getFunc().(Attribute).getAttr() = "sendmail" or
+       call.getFunc().(Attribute).getAttr() = "send_message") and
       sink.asExpr() = call.getAnArg()
     )
   }
