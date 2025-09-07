@@ -4,3 +4,4 @@ library: false
 extractor: python
 dependencies:
   codeql/python-all: "*"
+  codeql/python-queries: "*"
