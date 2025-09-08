@@ -39,7 +39,6 @@ jobs:
           # Restrict to Python only to avoid Go extraction warnings for this repository
           languages: python
           queries: ./.github/codeql/ryudes-python-email/queries/detailed-email-suite.qls
-          config-file: ${{ inputs.scope_email_only && '.github/codeql/codeql-config.yml' || '' }}
 
       - uses: github/codeql-action/autobuild@v3
 
