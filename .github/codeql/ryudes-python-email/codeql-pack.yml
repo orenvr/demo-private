@@ -1,6 +1,12 @@
 name: ryudes/python-email
 version: 0.0.1
+description: "Custom CodeQL queries for Python email header injection detection"
 library: false
 extractor: python
 dependencies:
   codeql/python-all: "*"
+
+# Specify the best/latest queries to run by default
+# Running only v2.1 - the latest and most optimized rule
+defaultSuiteQueries:
+  - queries/EnhancedV21Success.ql
