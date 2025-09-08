@@ -1,0 +1,27 @@
+# .github/workflows/ci-main.yaml - DISABLED
+# This workflow has been disabled to avoid conflicts with CodeQLcustom
+name: CodeQL-DISABLED
+
+# Disabled: no triggers
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+#   workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  analyze:
+    if: false  # This job will never run
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: go, python
+      - uses: github/codeql-action/analyze@v3
