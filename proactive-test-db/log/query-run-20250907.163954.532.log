@@ -1,0 +1,10 @@
+[2025-09-07 16:39:54] This is codeql query run --database=proactive-test-db .github/codeql/ryudes-python-email/queries/ProactiveEmailHeaderInjection.ql --output=proactive-validation.bqrs
+[2025-09-07 16:39:54] Log file was started late.
+[2025-09-07 16:39:54] Calling plumbing command: codeql resolve ram --dataset=/workspaces/demo-private/proactive-test-db/db-python --format=json
+[2025-09-07 16:39:54] [PROGRESS] resolve ram> Stringpool size measured as 2228634
+[2025-09-07 16:39:54] Plumbing command codeql resolve ram completed:
+                      [
+                        "-J-Xmx1390M"
+                      ]
+[2025-09-07 16:39:54] Chaining via /tmp/codeql.hQ46S4qG to plumbing: execute queries -J-Xmx1390M --verbosity=progress --logdir=/workspaces/demo-private/proactive-test-db/log --evaluator-log-level=5 --warnings=show --qlconfig-file=/workspaces/demo-private/qlconfig.yml --dynamic-join-order-mode=none --output=/workspaces/demo-private/proactive-validation.bqrs -- /workspaces/demo-private/proactive-test-db/db-python path:/workspaces/demo-private/.github/codeql/ryudes-python-email/queries/ProactiveEmailHeaderInjection.ql
+[2025-09-07 16:39:54] Exiting with code 70

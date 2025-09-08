@@ -1,0 +1,1 @@
+{"languages":{"python":{"displayName":"Python","files":["logger.py","send_demo.py","email_server.py","test_send_demo_smtp.py","mail_helpers.py","email_client.py","demo_pb2.py","demo_pb2_grpc.py"],"linesOfCode":881,"name":"python"}}}

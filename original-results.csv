@@ -1,0 +1,3 @@
+"col0","source","sink","col3"
+"ControlFlowNode for smtp_from","ControlFlowNode for smtp_from","ControlFlowNode for smtp_from","Untrusted input flows into an email header or SMTP envelope field."
+"ControlFlowNode for List","ControlFlowNode for user_email","ControlFlowNode for List","Untrusted input flows into an email header or SMTP envelope field."

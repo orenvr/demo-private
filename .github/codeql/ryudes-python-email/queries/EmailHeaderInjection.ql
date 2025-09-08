@@ -1,64 +1,54 @@
 /**
- * @name Untrusted data flows into email headers/SMTP (RyuDes)
- * @description Flags flows where untrusted input reaches email headers
- *              (To/Cc/Bcc/Subject/Reply-To) or SMTP recipient list without
- *              passing through recognized sanitizers/typed builders.
+ * @name Untrusted input in email header or SMTP envelope
+ * @description Flags untrusted input from function parameters flowing into email headers or SMTP envelope fields, even through intermediate variables and function calls.
  * @kind path-problem
  * @problem.severity error
- * @tags security, external/cwe/cwe-74, external/cwe/cwe-93
- * @id py/ryudes-email-header-injection
+ * @tags security, external/cwe/cwe-93, external/cwe/cwe-113
+ * @id py/untrusted-email-header-or-envelope
  */
 
 import python
 import semmle.python.dataflow.new.DataFlow
 import semmle.python.dataflow.new.TaintTracking
-import semmle.python.ApiGraphs
 
-/** Activate only when emailservice code exists (feature/project scope). */
-predicate intentActive() {
-  exists(File f | f.getRelativePath().regexpMatch("^src/(emailservice|.*email).*\\.py$"))
-}
-
-/** Heuristic: parameter names commonly used for people/addresses. */
-private predicate hasEmailishParamName(Parameter p) {
-  p.getName().regexpMatch("^(name|to_name|email|to_email|display_name|recipient)$")
-}
-
-/** Heuristic: expression text hints at request/payload-like data. */
-private predicate looksLikeRequestish(Expr e) {
-  e.toString().regexpMatch("(?i)(request|payload|body|data|json)")
-}
-
-/** Taint configuration tying sources/sinks/sanitizers together. */
-private module EmailHeaderConfig implements DataFlow::ConfigSig {
+module EmailHeaderConfig implements DataFlow::ConfigSig {
   predicate isSource(DataFlow::Node source) {
-    // Heuristic request/payload/data/json symbols
-    exists(Expr e | looksLikeRequestish(e) and source.asExpr() = e)
+    // Environment variable sources (as mentioned in PR success)
+    exists(Call c |
+      c.getFunc().(Attribute).getAttr() = "getenv" and
+      source = DataFlow::exprNode(c)
+    )
     or
-    // Email-ish parameter names
-    exists(Parameter p | hasEmailishParamName(p) and source = DataFlow::parameterNode(p))
+    // Function parameter sources with suspicious names  
+    exists(Parameter p |
+      p.getName().regexpMatch("(?i).*(name|email|order_id|body|from|to|display_name|recipient|user_name|user_email|smtp_from).*") and
+      source = DataFlow::parameterNode(p)
+    )
+    or
+    // Function call sources (user input sources mentioned in PR)
+    exists(Call c |
+      c.getFunc().(Name).getId().regexpMatch("(?i).*(input|get|recv|read).*") and
+      source = DataFlow::exprNode(c)
+    )
   }
 
   predicate isSink(DataFlow::Node sink) {
-    // Simple approach: look for calls to smtplib functions
-    exists(Call call |
-      call.getFunc().(Attribute).getAttr() = "sendmail" and
-      sink.asExpr() = call.getAnArg()
+    // Email header assignment sinks: msg["Header"] = value
+    exists(Subscript s |
+      sink.asExpr() = s.getValue()
     )
     or
-    // Look for email message header assignments
-    exists(Subscript s |
-      s.getObject().toString().regexpMatch(".*[Mm]essage.*") and
-      sink.asExpr() = s.getValue()
+    // SMTP sink detection: sendmail methods (as mentioned in PR success)
+    exists(Call c |
+      c.getFunc() instanceof Attribute and
+      c.getFunc().(Attribute).getAttr().regexpMatch("(?i).*(sendmail|send_message).*") and
+      (sink.asExpr() = c.getArg(0) or sink.asExpr() = c.getArg(1))
     )
   }
 }
 
 module EmailHeaderFlow = TaintTracking::Global<EmailHeaderConfig>;
 
-/** Report flows only when the feature/project scope is present. */
 from EmailHeaderFlow::PathNode source, EmailHeaderFlow::PathNode sink
-where intentActive() and EmailHeaderFlow::flowPath(source, sink)
-select sink.getNode(),
-  "Untrusted input flows into an email header/SMTP without header-safe sanitization.",
-  source, "Source here."
+where EmailHeaderFlow::flowPath(source, sink)
+select sink.getNode(), source, sink, "Untrusted input flows into an email header or SMTP envelope field."

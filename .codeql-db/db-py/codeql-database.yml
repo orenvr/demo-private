@@ -1,0 +1,13 @@
+---
+sourceLocationPrefix: /workspaces/demo-private
+baselineLinesOfCode: 1850
+unicodeNewlines: false
+columnKind: utf32
+primaryLanguage: python
+creationMetadata:
+  sha: 1b98c7a2909027fd3ecae289e48cdcb1b2f28367
+  cliVersion: 2.23.0
+  creationTime: 2025-09-07T14:27:02.685194705Z
+overlayBaseDatabase: false
+overlayDatabase: false
+finalised: true

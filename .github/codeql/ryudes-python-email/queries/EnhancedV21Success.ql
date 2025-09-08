@@ -1,7 +1,7 @@
 /**
  * @name Email Header Injection Detection (Enhanced v2.1 - SUCCESS)
  * @description Fast and reliable email header injection detection with proven patterns
- * @kind path-problem
+ * @kind problem
  * @problem.severity error
  * @tags security, external/cwe/cwe-93, external/cwe/cwe-113, enhanced-v2-1
  * @id py/enhanced-v2-1-email-header-injection-success
@@ -48,5 +48,4 @@ module EnhancedV21EmailFlow = TaintTracking::Global<EnhancedV21EmailConfig>;
 
 from EnhancedV21EmailFlow::PathNode source, EnhancedV21EmailFlow::PathNode sink
 where EnhancedV21EmailFlow::flowPath(source, sink)
-select sink.getNode(), source, sink, 
-  "Enhanced v2.1 SUCCESS: Untrusted input flows to email header/SMTP operation", source, sink
+select sink.getNode(), "Enhanced v2.1 SUCCESS: Untrusted input flows from $@ to email header/SMTP operation", source.getNode(), "source"
