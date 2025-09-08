@@ -2,13 +2,14 @@
 # This workflow has been disabled to avoid conflicts with CodeQLcustom
 name: CodeQL-DISABLED
 
-# Disabled: no triggers
-# on:
-#   push:
-#     branches: [ main ]
-#   pull_request:
-#     branches: [ main ]
-#   workflow_dispatch:
+# Disabled: workflow_dispatch only (manual trigger only, will not run automatically)
+on:
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: 'This workflow is disabled. Use CodeQLcustom instead.'
+        required: true
+        default: 'disabled'
 
 permissions:
   contents: read
