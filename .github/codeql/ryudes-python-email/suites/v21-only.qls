@@ -1,0 +1,5 @@
+- description: Enhanced v2.1 Email Security Analysis
+- queries:
+  - queries/EnhancedV21Success.ql
+- apply:
+    tags: enhanced-v2-1

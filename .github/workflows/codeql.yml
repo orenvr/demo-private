@@ -1,27 +1,72 @@
-name: CodeQL
+name: CodeQLcustom
 
 on:
-  push: { branches: [ main ] }
+  push: { branches: [ main, CodeQL-email-header ] }
   pull_request: { branches: [ main ] }
   workflow_dispatch:
+    inputs:
+      run_standard:
+        description: "Run standard CodeQL (built-in suites)"
+        type: boolean
+        default: true
+        required: false
+      run_custom:
+        description: "Run custom Email Header Injection pack"
+        type: boolean
+        default: true
+        required: false
+      scope_email_only:
+        description: "Restrict DB to services/email_service.py (faster demo)"
+        type: boolean
+        default: false
+        required: false
 
 permissions:
   contents: read
-  security-events: write   # <-- REQUIRED for uploading results
+  security-events: write
   actions: read
 
 jobs:
-  analyze:
+  standard-analysis:
+    if: ${{ inputs.run_standard == true || github.event_name != 'workflow_dispatch' }}
+    name: Standard CodeQL Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - uses: github/codeql-action/init@v3
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
           languages: go, python
-          queries: ./queries
+          # Remove this if you don't actually have a ./queries pack:
+          # queries: ./queries
+          # Optionally pass a config that scopes to one file when triggered:
+          config-file: ${{ inputs.scope_email_only && '.github/codeql/codeql-config.yml' || '' }}
 
-      - uses: github/codeql-action/autobuild@v3   # needed for Go
+      - uses: github/codeql-action/autobuild@v3  # needed for Go
 
-      - uses: github/codeql-action/analyze@v3     # uploads SARIF to Code Scanning
-        # Do NOT set upload:false here
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "standard-codeql"
+
+  custom-analysis:
+    if: ${{ inputs.run_custom == true || github.event_name != 'workflow_dispatch' }}
+    name: Custom CodeQL Analysis (Email Header Injection)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL (custom pack)
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python           # just Python for your custom rule
+          queries: ./.github/codeql/ryudes-python-email/queries/EnhancedV21Success.ql
+          config-file: ${{ inputs.scope_email_only && '.github/codeql/codeql-config.yml' || '' }}
+
+      # No autobuild needed for pure Python
+
+      - name: Analyze (custom)
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "custom-email-header"

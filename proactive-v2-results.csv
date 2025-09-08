@@ -1,0 +1,4 @@
+"col0","source","sink","col3"
+"ControlFlowNode for BoolExpr","ControlFlowNode for body","ControlFlowNode for BoolExpr","Enhanced proactive detection: Untrusted input from order confirmation parameters flows to email headers or SMTP operations."
+"ControlFlowNode for smtp_from","ControlFlowNode for smtp_from","ControlFlowNode for smtp_from","Enhanced proactive detection: Untrusted input from order confirmation parameters flows to email headers or SMTP operations."
+"ControlFlowNode for List","ControlFlowNode for user_email","ControlFlowNode for List","Enhanced proactive detection: Untrusted input from order confirmation parameters flows to email headers or SMTP operations."

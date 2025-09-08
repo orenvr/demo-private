@@ -1,0 +1,2 @@
+"col0","source","sink","col3"
+"ControlFlowNode for List","ControlFlowNode for user_email","ControlFlowNode for List","Proactive Detection: Untrusted input from order confirmation parameter 'ControlFlowNode for user_email' flows to email header/SMTP operation at 'ControlFlowNode for List'. This vulnerability was predicted from agent instructions before code implementation."
