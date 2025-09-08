@@ -1,4 +1,3 @@
-queries:
-  - EmailToHeaderInjection.ql
-  - EmailSubjectHeaderInjection.ql  
-  - SMTPRecipientInjection.ql
+- query: EmailToHeaderInjection.ql
+- query: EmailSubjectHeaderInjection.ql  
+- query: SMTPRecipientInjection.ql
