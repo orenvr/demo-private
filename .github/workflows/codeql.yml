@@ -61,7 +61,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: python           # just Python for your custom rule
-          queries: ./.github/codeql/ryudes-python-email/queries/EnhancedV21Success.ql
+          queries: ./.github/codeql/ryudes-python-email/queries/EnhancedV21DetailedAlerts.ql
           config-file: ${{ inputs.scope_email_only && '.github/codeql/codeql-config.yml' || '' }}
 
       # No autobuild needed for pure Python
