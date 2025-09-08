@@ -64,6 +64,7 @@ jobs:
       uses: github/codeql-action/init@v3
       with:
         languages: ${{ matrix.language }}
+        queries: ./.github/codeql/ryudes-python-email/queries/EnhancedV21Success.ql
         config: |
           paths:
             - src/
@@ -76,9 +77,6 @@ jobs:
             - '**/__pycache__'
             - '**/venv'
             - '**/node_modules'
-          packs:
-            python:
-              - .github/codeql/ryudes-python-email
         setup-python-dependencies: false
         
     - name: Create test vulnerable code for validation
