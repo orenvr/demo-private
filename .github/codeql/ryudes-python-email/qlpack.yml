@@ -1,0 +1,6 @@
+name: ryudes/python-email
+version: 1.0.0
+libraryPathDependencies:
+  - codeql/python-all
+dependencies:
+  - codeql/python-queries
