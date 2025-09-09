@@ -23,4 +23,4 @@ def test_vulnerable_paths():
         order_id="12345",
         smtp_from="shop@example.com"
     )
-# Force fresh CodeQL scan - Mon Sep  8 13:56:22 UTC 2025
+# Force fresh CodeQL scan - Mon Sep  9 14:00:00 UTC 2025
