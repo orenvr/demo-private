@@ -38,7 +38,7 @@ jobs:
         with:
           # Restrict to Python only to avoid Go extraction warnings for this repository
           languages: python
-          queries: ./.github/codeql/ryudes-python-email/queries/detailed-email-suite.qls
+          queries: security-extended,security-and-quality,./.github/codeql/ryudes-python-email/queries/detailed-email-suite.qls
 
       - uses: github/codeql-action/autobuild@v3
 
