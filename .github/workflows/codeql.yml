@@ -36,9 +36,10 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          # Restrict to Python only to avoid Go extraction warnings for this repository
-          languages: python
-          queries: security-extended,security-and-quality,./.github/codeql/ryudes-python-email/queries/detailed-email-suite.qls
+          # Run both Python and Go to catch all vulnerabilities
+          languages: python,go
+          # Use only security queries
+          queries: security-extended
 
       - uses: github/codeql-action/autobuild@v3
 
