@@ -1,0 +1,15 @@
+- description: Comprehensive Email Security Analysis for Python Email Service
+- queries:
+  - queries/EmailHeaderInjection.ql
+  - queries/EmailHeaderInjectionSimple.ql
+  - queries/EmailSubjectHeaderInjection.ql
+  - queries/EmailToHeaderInjection.ql
+  - queries/SMTPRecipientInjection.ql
+  - queries/ProactiveEmailHeaderInjection.ql
+  - queries/ProactiveV2EmailHeaderInjection.ql
+  - queries/ProactiveV3EmailHeaderInjection.ql
+  - queries/EnhancedV21EmailHeaderInjection.ql
+  - queries/EnhancedV21DetailedAlerts.ql
+  - queries/EnhancedV21Success.ql
+- apply:
+    tags: email-security

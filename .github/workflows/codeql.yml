@@ -1,25 +1,21 @@
-name: CodeQLcustom
+name: CodeQL Email Service Security
 
 on:
-  push: { branches: [ main, CodeQL-email-header ] }
-  pull_request: { branches: [ main ] }
+  push: 
+    branches: [ main ]
+    paths:
+      - 'src/emailservice/**'
+      - 'src/*email*'
+      - 'src/test_*email*'
+      - 'src/test_vulnerabilities.py'
+  pull_request: 
+    branches: [ main ]
+    paths:
+      - 'src/emailservice/**'
+      - 'src/*email*'
+      - 'src/test_*email*'
+      - 'src/test_vulnerabilities.py'
   workflow_dispatch:
-    inputs:
-      run_standard:
-        description: "Run standard CodeQL (built-in suites)"
-        type: boolean
-        default: true
-        required: false
-      run_custom:
-        description: "Run custom Email Header Injection pack"
-        type: boolean
-        default: true
-        required: false
-      scope_email_only:
-        description: "Restrict DB to services/email_service.py (faster demo)"
-        type: boolean
-        default: false
-        required: false
 
 permissions:
   contents: read
@@ -28,7 +24,7 @@ permissions:
 
 jobs:
   codeql-analysis:
-    name: CodeQL Analysis
+    name: Email Service Security Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,12 +32,8 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          # Run both Python and Go to catch all vulnerabilities
-          languages: python,go
-          # Use only security queries
-          queries: security-extended
+          languages: python
+          queries: ./.github/codeql/ryudes-python-email/suites/email-security-suite.qls
 
-      - uses: github/codeql-action/autobuild@v3
-
-      - name: Analyze
+      - name: Analyze Email Service
         uses: github/codeql-action/analyze@v3
