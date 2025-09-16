@@ -1,3 +1,12 @@
+# ===================================================================
+# DISABLED WORKFLOW - Standard CodeQL Analysis
+# ===================================================================
+# This workflow has been DISABLED to avoid conflicts with the 
+# CUSTOM CodeQL workflow in codeql.yml
+# 
+# For CUSTOM CodeQL rules, use: .github/workflows/codeql.yml
+# ===================================================================
+
 # .github/workflows/ci-main.yaml - DISABLED
 # This workflow has been disabled to avoid conflicts with CodeQLcustom
 name: CodeQL-DISABLED
