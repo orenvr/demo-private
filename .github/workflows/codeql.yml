@@ -1,3 +1,11 @@
+# ===================================================================
+# CUSTOM CODEQL WORKFLOW - Email Security Analysis
+# ===================================================================
+# This workflow contains the CodeQL CUSTOM RULES for email security
+# Custom query pack: .github/codeql/ryudes-python-email/
+# Custom queries: 11 specialized email injection detection rules
+# ===================================================================
+
 name: CodeQL Email Service Security
 
 on:

@@ -3,6 +3,15 @@
 </p> -->
 ![Continuous Integration](https://github.com/GoogleCloudPlatform/microservices-demo/workflows/Continuous%20Integration%20-%20Main/Release/badge.svg)
 
+## 🔒 CodeQL Custom Rules Quick Reference
+
+**Looking for the CodeQL custom rule workflow?**
+- **Active Workflow**: `.github/workflows/codeql.yml` - "CodeQL Email Service Security"
+- **Custom Rules**: 11 specialized email security queries in `.github/codeql/ryudes-python-email/`
+- **Full Guide**: See [`CODEQL_WORKFLOW_GUIDE.md`](CODEQL_WORKFLOW_GUIDE.md) for complete details
+
+---
+
 **Online Boutique** is a cloud-first microservices demo application.  The application is a
 web-based e-commerce app where users can browse items, add them to the cart, and purchase them.
 
